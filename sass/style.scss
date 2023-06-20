@@ -1,0 +1,38 @@
+@charset "utf-8";
+@import "../node_modules/bulma/bulma.sass";
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap');
+
+$scheme-main: $black;
+
+.container {
+    padding-top: 10%;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.task {
+    margin-top: 10px;
+    width: 100%;
+}
+
+span .button .icon-text .searcher-buttons {
+    padding: 5px 21px 5px 21px;
+}
+
+form {
+    padding: 5px 0px 5px 0px;
+}
+
+$family-sans-serif: "Open sans", sans-serif;
+@import "../node_modules/bulma/sass/utilities/_all.sass";
+@import "../node_modules/bulma/sass/base/_all.sass";
+@import "../node_modules/bulma/sass/elements/button.sass";
+@import "../node_modules/bulma/sass/elements/container.sass";
+@import "../node_modules/bulma/sass/elements/title.sass";
+@import "../node_modules/bulma/sass/form/_all.sass";
+@import "../node_modules/bulma/sass/components/navbar.sass";
+@import "../node_modules/bulma/sass/layout/hero.sass";
+@import "../node_modules/bulma/sass/layout/section.sass";
+@import "../node_modules/bulma/sass/components/_all.sass";

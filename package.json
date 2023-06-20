@@ -1,0 +1,22 @@
+{
+  "name": "todo-yew",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sass/style.scss",
+  "scripts": {
+    "build:css": "node-sass -x sass/style.scss css/style.css",
+    "watch:css": "pnpm build:css --watch",
+    "start:css": "pnpm watch:css",
+    "start:rust": "trunk serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "sass": "^1.63.4"
+  },
+  "devDependencies": {
+    "bulma": "^0.9.4",
+    "node-sass": "^9.0.0"
+  }
+}
