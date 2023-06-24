@@ -1,4 +1,7 @@
-use crate::components::{Task, TaskModel};
+use crate::{
+    components::{Task, TaskModel},
+    services::Mode,
+};
 use yew::prelude::*;
 
 use crate::services::Storage;
@@ -21,7 +24,9 @@ pub fn tasks_mapping(TasksProps { tasks }: &TasksProps) -> Html {
                 .filter(|task| task.id != id)
                 .cloned()
                 .collect::<Vec<_>>();
-            database.save("tasks", arr.clone()).unwrap();
+            database
+                .save("tasks", arr.clone(), Default::default())
+                .unwrap();
             tasks.set(arr);
         })
     };
@@ -44,7 +49,9 @@ pub fn tasks_mapping(TasksProps { tasks }: &TasksProps) -> Html {
                     }
                 })
                 .collect::<Vec<_>>();
-            database.save("tasks", arr.clone()).unwrap();
+            database
+                .save("tasks", arr.clone(), Default::default())
+                .unwrap();
             tasks.set(arr);
         })
     };

@@ -1,5 +1,5 @@
 use app::components::{InputProvider, TaskModel, Tasks};
-use app::services::Storage;
+use app::services::{Mode, Storage};
 use wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
 
@@ -15,7 +15,7 @@ fn app() -> Html {
             move |_| {
                 tasks.set(
                     database
-                        .get_as::<Vec<TaskModel>>("tasks")
+                        .get_as::<Vec<TaskModel>>("tasks", Default::default())
                         .unwrap_or_default(),
                 )
             }
@@ -38,7 +38,7 @@ fn app() -> Html {
                 locked: Some(true),
                 value: value.to_string(),
             });
-            database.save("tasks", &arr).unwrap();
+            database.save("tasks", &arr, Default::default()).unwrap();
             tasks.set(arr);
         })
     };
