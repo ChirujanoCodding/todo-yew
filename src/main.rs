@@ -1,6 +1,5 @@
 use app::components::{InputProvider, TaskModel, Tasks};
 use app::services::Storage;
-use std::rc::Rc;
 use wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
 
@@ -20,11 +19,6 @@ fn app() -> Html {
         },
         (),
     );
-
-    // use_effect({
-    //     let tasks = tasks.clone();
-    //     || match database.get_as::<Vec<TaskModel>>("tasks") {}
-    // });
 
     let add_task = {
         let tasks = tasks.clone();
