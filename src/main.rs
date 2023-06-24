@@ -12,9 +12,12 @@ fn app() -> Html {
         {
             let tasks = tasks.clone();
             let database = database.clone();
-            move |_| match database.get_as::<Vec<TaskModel>>("tasks") {
-                Err(_) => tasks.set(Vec::new()),
-                Ok(fetched_tasks) => tasks.set(fetched_tasks),
+            move |_| {
+                tasks.set(
+                    database
+                        .get_as::<Vec<TaskModel>>("tasks")
+                        .unwrap_or_default(),
+                )
             }
         },
         (),

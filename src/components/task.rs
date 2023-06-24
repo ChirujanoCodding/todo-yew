@@ -51,12 +51,11 @@ pub fn task(
         let me = me.clone();
         Callback::from(move |e| {
             let name = get_input_value(e);
-            match name.is_empty() {
-                true => {
-                    error.set(Some("The task cannot be empty".into()));
-                }
-                false => error.set(None),
-            };
+            error.set(if name.is_empty() {
+                Some("The task cannot be empty".into())
+            } else {
+                None
+            });
             input.set(name.clone());
             let model = TaskModel {
                 id: me.id,
@@ -73,13 +72,12 @@ pub fn task(
         let input = input.clone();
         let on_edit = on_edit.clone();
         Callback::from(move |_: MouseEvent| {
-            match input.is_empty() {
-                true => {
-                    error.set(Some("The task cannot be empty".into()));
-                    return;
-                }
-                false => error.set(None),
-            };
+            if input.is_empty() {
+                error.set(Some("The task cannot be empty".into()));
+                return;
+            } else {
+                error.set(None)
+            }
 
             if let Some(true) = me.locked {
                 me.set(TaskModel {
@@ -118,12 +116,11 @@ pub fn task(
         let on_edit = on_edit.clone();
         Callback::from(move |e: KeyboardEvent| {
             if e.key() == *"Enter" {
-                match input.is_empty() {
-                    true => {
-                        error.set(Some("The task cannot be empty".into()));
-                        return;
-                    }
-                    false => error.set(None),
+                if input.is_empty() {
+                    error.set(Some("The task cannot be empty".into()));
+                    return;
+                } else {
+                    error.set(None)
                 };
                 match me.locked {
                     Some(true) | None => {

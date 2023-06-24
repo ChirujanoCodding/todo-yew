@@ -36,9 +36,8 @@ pub fn tasks_mapping(TasksProps { tasks }: &TasksProps) -> Html {
                 .map(|task| {
                     if task.id == new_task.id {
                         TaskModel {
-                            id: new_task.id,
-                            value: new_task.value.clone(),
                             locked: task.locked,
+                            ..new_task.clone()
                         }
                     } else {
                         task

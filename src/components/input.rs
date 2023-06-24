@@ -16,7 +16,7 @@ fn get_input_value(e: InputEvent) -> String {
 #[function_component(InputProvider)]
 pub fn input(props: &InputProps) -> Html {
     let input = use_state(String::new);
-    let error: UseStateHandle<Option<String>> = use_state(|| Some(String::new()));
+    let error: UseStateHandle<Option<String>> = use_state(|| None);
 
     let handle_enter = {
         let error = error.clone();
@@ -24,13 +24,11 @@ pub fn input(props: &InputProps) -> Html {
         let input = input.clone();
         Callback::from(move |e: KeyboardEvent| {
             if e.key() == *"Enter" {
-                match input.is_empty() {
-                    true => {
-                        error.set(Some("The task cannot be empty".into()));
-                        return;
-                    }
-                    false => error.set(None),
-                };
+                error.set(if input.is_empty() {
+                    Some("The task cannot be empty".into())
+                } else {
+                    None
+                });
                 on_click.emit(input.to_string().into())
             }
         })
@@ -41,12 +39,11 @@ pub fn input(props: &InputProps) -> Html {
         let input = input.clone();
         Callback::from(move |e| {
             let value = get_input_value(e);
-            match value.is_empty() {
-                true => {
-                    error.set(Some("The task cannot be empty".into()));
-                }
-                false => error.set(None),
-            };
+            error.set(if value.is_empty() {
+                Some("The task cannot be empty".into())
+            } else {
+                None
+            });
             input.set(value.trim().into())
         })
     };
@@ -55,21 +52,16 @@ pub fn input(props: &InputProps) -> Html {
         let error = error.clone();
         let on_click = props.on_submit.clone();
         Callback::from(move |_| {
-            match input.is_empty() {
-                true => {
-                    error.set(Some("The task cannot be empty".into()));
-                    return;
-                }
-                false => error.set(None),
-            };
+            error.set(if input.is_empty() {
+                Some("The task cannot be empty".into())
+            } else {
+                None
+            });
             on_click.emit(input.to_string().into())
         })
     };
 
-    let message = match (*error).clone() {
-        Some(msg) => msg,
-        None => "".to_string(),
-    };
+    let message = (*error).clone().unwrap_or_default();
 
     let input_class = if message.is_empty() {
         "input is-fullwidth"
