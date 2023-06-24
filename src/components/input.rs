@@ -4,12 +4,11 @@ use yew::prelude::*;
 
 #[derive(Properties, PartialEq, Clone)]
 pub struct InputProps {
-    pub on_submit: Callback<String>,
+    pub on_submit: Callback<AttrValue>,
 }
 
 fn get_input_value(e: InputEvent) -> String {
-    let event: Event = e.dyn_into().unwrap_throw();
-    let event_target = event.target().unwrap_throw();
+    let event_target = e.target().unwrap_throw();
     let target: HtmlInputElement = event_target.dyn_into().unwrap_throw();
     target.value()
 }
@@ -32,7 +31,7 @@ pub fn input(props: &InputProps) -> Html {
                     }
                     false => error.set(None),
                 };
-                on_click.emit(input.to_string())
+                on_click.emit(input.to_string().into())
             }
         })
     };
@@ -48,7 +47,7 @@ pub fn input(props: &InputProps) -> Html {
                 }
                 false => error.set(None),
             };
-            input.set(value)
+            input.set(value.trim().into())
         })
     };
 
@@ -63,7 +62,7 @@ pub fn input(props: &InputProps) -> Html {
                 }
                 false => error.set(None),
             };
-            on_click.emit(input.to_string())
+            on_click.emit(input.to_string().into())
         })
     };
 
@@ -79,7 +78,7 @@ pub fn input(props: &InputProps) -> Html {
     };
 
     html! {
-            <div class="field has-addons">
+            <div class="field has-addons searcher">
                 <div class="control has-icons-left is-expanded">
                     <input type="text" class={input_class} placeholder="Study for math..." oninput={on_input_change} onkeyup={handle_enter}/>
                     <span class="icon is-small is-left">
@@ -90,11 +89,6 @@ pub fn input(props: &InputProps) -> Html {
                 <div class="control">
                     <span class="button icon-text searcher-buttons" onclick={on_click}>
                     <button class="fas fa-plus"></button>
-                    </span>
-                </div>
-                <div class="control">
-                    <span class="button icon-text searcher-buttons">
-                    <button class="fas fa-search "></button>
                     </span>
                 </div>
             </div>

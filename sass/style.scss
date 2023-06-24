@@ -3,13 +3,14 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap');
 
-$scheme-main: $black;
-
 .container {
     padding-top: 10%;
     display: grid;
     justify-content: center;
-    align-items: center;
+}
+
+.searcher {
+    width: 500px;
 }
 
 .task {

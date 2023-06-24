@@ -1,10 +1,30 @@
-use app::components::{InputProvider, Task, TaskModel};
+use app::components::{InputProvider, TaskModel, Tasks};
+use app::services::Storage;
+use std::rc::Rc;
 use wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
 
 #[function_component(App)]
 fn app() -> Html {
     let tasks = use_state(Vec::<TaskModel>::new);
+    let database = use_state(Storage::default);
+
+    use_effect_with_deps(
+        {
+            let tasks = tasks.clone();
+            let database = database.clone();
+            move |_| match database.get_as::<Vec<TaskModel>>("tasks") {
+                Err(_) => tasks.set(Vec::new()),
+                Ok(fetched_tasks) => tasks.set(fetched_tasks),
+            }
+        },
+        (),
+    );
+
+    // use_effect({
+    //     let tasks = tasks.clone();
+    //     || match database.get_as::<Vec<TaskModel>>("tasks") {}
+    // });
 
     let add_task = {
         let tasks = tasks.clone();
@@ -13,62 +33,28 @@ fn app() -> Html {
         } else {
             tasks.iter().map(|task| task.id).max().unwrap_throw()
         };
-        Callback::from(move |value| {
-            let mut arr = tasks[..].to_vec();
+        let database = database.clone();
+        Callback::from(move |value: AttrValue| {
+            let mut arr = tasks.to_vec();
             arr.push(TaskModel {
                 id: current_id + 1,
-                value: Some(value),
                 locked: Some(true),
+                value: value.to_string(),
             });
+            database.save("tasks", &arr).unwrap();
             tasks.set(arr);
         })
     };
 
-    let remove_task = {
-        let tasks = tasks.clone();
-        Callback::from(move |id| {
-            let arr = tasks
-                .iter()
-                .filter(|task| task.id != id)
-                .cloned()
-                .collect::<Vec<_>>();
-            tasks.set(arr);
-        })
-    };
-
-    let edit_task = {
-        let tasks = tasks.clone();
-        Callback::from(move |new_task: TaskModel| {
-            let arr = tasks
-                .iter()
-                .cloned()
-                .map(|task| {
-                    if task.id == new_task.id {
-                        TaskModel {
-                            id: new_task.id,
-                            value: new_task.value.clone(),
-                            locked: task.locked,
-                        }
-                    } else {
-                        task
-                    }
-                })
-                .collect::<Vec<_>>();
-            tasks.set(arr);
-        })
-    };
+    // Se podria hacer un componente llamado TaskMapper o Tasks ?
 
     html! {
         <div class="container">
             <h1 class="title">{"Todo list"}</h1>
-            <InputProvider on_submit={add_task}/>
-            {
-                for tasks.iter().rev().map(|task| {
-                    html_nested! {
-                        <Task key={task.id} id={task.id} value={task.value.clone()} on_delete={remove_task.clone()} on_edit={edit_task.clone()} />
-                    }
-                })
-            }
+            <ContextProvider<Storage> context={(*database).clone()}>
+                <InputProvider on_submit={add_task}/>
+                <Tasks tasks={tasks.clone()} />
+            </ContextProvider<Storage>>
         </div>
     }
 }
