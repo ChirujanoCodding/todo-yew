@@ -1,5 +1,5 @@
 use app::components::{InputProvider, TaskModel, Tasks};
-use app::services::{Mode, Storage};
+use app::services::Storage;
 use wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
 

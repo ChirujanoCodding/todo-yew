@@ -1,7 +1,4 @@
-use crate::{
-    components::{Task, TaskModel},
-    services::Mode,
-};
+use crate::components::{Task, TaskModel};
 use yew::prelude::*;
 
 use crate::services::Storage;
