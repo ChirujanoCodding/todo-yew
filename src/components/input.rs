@@ -15,8 +15,8 @@ fn get_input_value(e: InputEvent) -> String {
 
 #[function_component(InputProvider)]
 pub fn input(props: &InputProps) -> Html {
-    let input = use_state(String::new);
-    let error: UseStateHandle<Option<String>> = use_state(|| None);
+    let input = use_state(AttrValue::default);
+    let error: UseStateHandle<Option<AttrValue>> = use_state(|| None);
 
     let handle_enter = {
         let error = error.clone();
@@ -44,7 +44,7 @@ pub fn input(props: &InputProps) -> Html {
             } else {
                 None
             });
-            input.set(value.trim().into())
+            input.set(value.trim().to_string().into())
         })
     };
 

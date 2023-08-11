@@ -35,9 +35,8 @@ pub fn task(
         value: value.clone().to_string(),
         locked: *locked,
     });
-
     let input = use_state(|| value.clone());
-    let error: UseStateHandle<Option<String>> = use_state(|| None);
+    let error: UseStateHandle<Option<AttrValue>> = use_state(|| None);
 
     let handle_delete = {
         let me = me.clone();
